@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats du Chiffrage</title>
+    <style>
+        /* Style global */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            background-color: #007BFF;
+            padding: 20px 0;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            text-align: center;
+            color: #555;
+        }
+        .summary {
+            text-align: center;
+            font-size: 1.5em;
+            color: #28a745;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+            padding: 12px;
+        }
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .actions a {
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 10px;
+            display: inline-block;
+            font-size: 1.1em;
+        }
+        .actions a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Titre principal -->
+    <h1 class="main-title">Résultats du Chiffrage</h1>
+    
+    <!-- Contenu principal -->
+    <div class="container">
+        <p>Voici les calculs effectués :</p>
+        
+        <!-- Affichage du Total Global -->
+        <div class="summary">
+            <strong>Total Global : € {{ total_global }}</strong>
+        </div>
+
+        <!-- Tableau des résultats -->
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Lot</th>
+                    <th>Description</th>
+                    <th>Quantité</th>
+                    <th>Unité</th>
+                    <th>Prix Unitaire (€)</th>
+                    <th>Total (€)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lot in lots %}
+                <tr>
+                    <td>{{ lot.lot_name }}</td>
+                    <td>{{ lot.description }}</td>
+                    <td>{{ lot.quantity }}</td>
+                    <td>{{ lot.unit }}</td>
+                    <td>{{ lot.unit_price }}</td>
+                    <td>{{ lot.total }}</td>
+                </tr>
+                {% endfor %}
+            
+                {% for sub in sub_details %}
+                <tr>
+                    <td>Sous-Détail</td>
+                    <td>{{ sub.description }}</td>
+                    <td>{{ sub.quantity }}</td>
+                    <td>{{ sub.unit }}</td>
+                    <td>{{ sub.unit_price }}</td>
+                    <td>{{ sub.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Actions (boutons) -->
+        <div class="actions">
+            <a href="/export" class="btn">Télécharger les résultats</a>
+            <a href="/data-entry" class="btn">Entrer de nouvelles données</a>
+            <a href="/" class="btn">Retourner à l'accueil</a>
+        </div>
+    </div>
+</body>
+</html>
+

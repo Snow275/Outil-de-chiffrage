@@ -1,0 +1,29 @@
+{
+  "lots": [
+    {
+      "nom": "Gros Œuvre",
+      "sous_details": [
+        {
+          "description": "Béton armé",
+          "prix_unitaire": 200,
+          "unite": "m³"
+        },
+        {
+          "description": "Plancher",
+          "prix_unitaire": 150,
+          "unite": "m²"
+        }
+      ]
+    },
+    {
+      "nom": "Terrassement",
+      "sous_details": [
+        {
+          "description": "Excavation",
+          "prix_unitaire": 50,
+          "unite": "m³"
+        }
+      ]
+    }
+  ]
+}
