@@ -19,36 +19,76 @@ def find_prix_unitaire(description):
 app = Flask(__name__)
 app.secret_key = 'dynamic_lots_secret_key'
 
+@app.route('/test-prix-unitaire')
+def test_prix_unitaire():
+    lot_name = "Gros Œuvre"
+    description = "Plancher"
+    prix_unitaire, unite = find_prix_unitaire(lot_name, description)
+    return f"Prix unitaire: {prix_unitaire}, Unité: {unite}"
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/get-prix-unitaire', methods=['POST'])
+def get_prix_unitaire():
+    data = request.json
+    lot_name = data.get('lot_name')
+    description = data.get('description')
+
+    prix_unitaire, unite = find_prix_unitaire(lot_name, description)
+    if prix_unitaire is None or unite is None:
+        return jsonify({'error': 'Lot ou sous-détail introuvable'}), 404
+
+    return jsonify({
+        'prix_unitaire': prix_unitaire,
+        'unite': unite
+    })
+
+@app.route('/add-lot', methods=['POST'])
+def add_lot():
+    new_lot = request.json  # Attendre un objet JSON avec 'nom' et 'sous_details'
+
+    # Charger et mettre à jour le fichier JSON
+    with open('data.json', 'r') as f:
+        db = json.load(f)
+
+    db['lots'].append(new_lot)
+
+    with open('data.json', 'w') as f:
+        json.dump(db, f, indent=4)
+
+    return jsonify({'message': 'Lot ajouté avec succès !'})
+
 @app.route('/data-entry', methods=['GET', 'POST'])
 def data_entry():
     if request.method == 'POST':
+        # Récupération des données pour les lots principaux
+        lots = request.form.getlist('lot_name[]')
         descriptions = request.form.getlist('description[]')
         quantities = request.form.getlist('quantity[]')
-        units = request.form.getlist('unit[]')
+        unit = request.form.getlist('unit[]')
 
-   # Récupération des données pour les sous-détails
+        # Récupération des données pour les sous-détails
         sub_descriptions = request.form.getlist('sub_description[]')
         sub_quantities = request.form.getlist('sub_quantity[]')
         sub_units = request.form.getlist('sub_unit[]')
         sub_unit_prices = request.form.getlist('sub_unit_price[]')
-        
+
+        # Construire les données des lots principaux
         all_lots = []
         total_global = 0
 
-        for i in range(len(descriptions)):
+        for i in range(len(lots)):
             try:
+                lot_name = lots[i]
                 description = descriptions[i]
                 quantity = float(quantities[i]) if quantities[i] else 0
 
-                # 🔍 Recherche du prix unitaire basé uniquement sur la description
                 prix_unitaire, unit = find_prix_unitaire(description)
-                print(f"Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
+                    print(f"Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
 
-                # 💡 Calcul du total
+                # Calcul du total
                 total = quantity * prix_unitaire if prix_unitaire else 0
                 total_global += total
 
@@ -62,8 +102,9 @@ def data_entry():
                     'total': total
                 })
             except Exception as e:
-                print(f"Erreur lors du traitement de la description {descriptions[i]} : {e}")
+                print(f"Erreur lors du traitement du lot {lots[i]} : {e}")
                 all_lots.append({
+                    'lot_name': lots[i],
                     'description': descriptions[i],
                     'quantity': quantity,
                     'unit': "N/A",
@@ -71,16 +112,33 @@ def data_entry():
                     'total': 0
                 })
 
-        # 📦 Stockage des résultats
+        # Construire les données des sous-détails
+        all_sub_details = []
+        for i in range(len(sub_descriptions)):
+            try:
+                quantity = float(sub_quantities[i]) if sub_quantities[i] else 0
+                unit_price = float(sub_unit_prices[i]) if sub_unit_prices[i] else 0
+                total = quantity * unit_price
+                total_global += total
+                all_sub_details.append({
+                    'description': sub_descriptions[i],
+                    'quantity': quantity,
+                    'unit': sub_units[i],
+                    'unit_price': unit_price,
+                    'total': total
+                })
+            except (ValueError, IndexError):
+                print(f"Erreur lors du traitement du sous-détail {sub_descriptions[i]}")
+                continue
+
+        # Stocker dans la session
         session['all_lots'] = all_lots
+        session['all_sub_details'] = all_sub_details
         session['total_global'] = total_global
 
-        return render_template('results.html', lots=all_lots, total_global=total_global)
+        return render_template('results.html', lots=all_lots, sub_details=all_sub_details, total_global=total_global)
 
     return render_template('data_entry.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 @app.route('/export')
 def export():
