@@ -5,7 +5,7 @@ import json
 
 # Fonction pour chercher le prix unitaire et l'unité
 def find_prix_unitaire(lot_name, description):
-    with open('data.json', 'r') as f:
+    with open('data.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
     for lot in data['lots']:
         if lot['nom'].strip().lower() == lot_name.strip().lower():
@@ -13,8 +13,6 @@ def find_prix_unitaire(lot_name, description):
                 if sous_detail['description'].strip().lower() == description.strip().lower():
                     return sous_detail['prix_unitaire'], sous_detail['unite']
     return 0, "U"
-
-
 
 app = Flask(__name__)
 app.secret_key = 'dynamic_lots_secret_key'
