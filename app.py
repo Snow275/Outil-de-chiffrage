@@ -16,21 +16,6 @@ def find_prix_unitaire(description):
 
     return 0, "U"  # Si non trouvé
 
-@app.route('/get-prix-unitaire', methods=['POST'])
-def get_prix_unitaire():
-    data = request.json
-    description = data.get('description')
-
-    prix_unitaire, unite = find_prix_unitaire(description)
-    if prix_unitaire == 0:
-        return jsonify({'error': 'Sous-détail introuvable'}), 404
-
-    return jsonify({
-        'prix_unitaire': prix_unitaire,
-        'unite': unite
-    })
-
-
 app = Flask(__name__)
 app.secret_key = 'dynamic_lots_secret_key'
 
@@ -75,6 +60,21 @@ def data_entry():
         return render_template('results.html', lots=all_lots, sub_details=all_sub_details, total_global=total_global)
 
     return render_template('data_entry.html')
+
+
+@app.route('/get-prix-unitaire', methods=['POST'])
+def get_prix_unitaire():
+    data = request.json
+    description = data.get('description')
+
+    prix_unitaire, unite = find_prix_unitaire(description)
+    if prix_unitaire == 0:
+        return jsonify({'error': 'Sous-détail introuvable'}), 404
+
+    return jsonify({
+        'prix_unitaire': prix_unitaire,
+        'unite': unite
+    })
 
 @app.route('/export')
 def export():
