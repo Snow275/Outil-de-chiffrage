@@ -97,7 +97,6 @@
         <table class="results-table">
             <thead>
                 <tr>
-                    <th>Lot</th>
                     <th>Description</th>
                     <th>Quantité</th>
                     <th>Unité</th>
@@ -108,7 +107,6 @@
             <tbody>
                 {% for lot in lots %}
                 <tr>
-                    <td>{{ lot.lot_name }}</td>
                     <td>{{ lot.description }}</td>
                     <td>{{ lot.quantity }}</td>
                     <td>{{ lot.unit }}</td>
