@@ -155,18 +155,6 @@
     <!-- Conteneur Principal -->
     <div class="container">
         <form action="/data-entry" method="POST">
-            <div id="sub-details-container">
-                <div class="sub-detail">
-                    <input type="text" name="sub_description[]" placeholder="Description" required>
-                    <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
-                </div>
-            </div>
-            <button type="button" class="btn" onclick="addSubDetail()">+ Ajouter un Sous-Détail</button>
-            <button type="submit" class="btn">Calculer</button>
-        </form>
-    </div>
-
-
             <!-- Section Lot Principal -->
             <div class="section">
                 <div class="section-title">Lot Principal</div>
@@ -197,64 +185,17 @@
                 </div>
             </div>
 
-           <!-- Section Sous-Détails -->
+            <!-- Section Sous-Détails -->
             <div class="sub-details">
                 <div class="section-title">Sous-Détails</div>
-                <div id="sub-details-container">
-                    <div class="sub-detail">
-                        <input type="text" name="sub_description[]" placeholder="Description" onblur="fetchPrixUnitaire(this)" required>
-                        <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
-                        <input type="text" name="sub_unit_price[]" placeholder="Prix Unitaire (€)" readonly>
-                    </div>
-                </div>
+                <div id="sub-details-container"></div>
                 <button type="button" class="btn" onclick="addSubDetail()">+ Ajouter un Sous-Détail</button>
             </div>
 
-            <!-- Bouton Calculer -->
+            <!-- Actions -->
             <div class="actions">
                 <button type="submit" class="btn">Calculer</button>
             </div>
-        </form>
-    </div>
-
-    <script>
-        // Ajouter un sous-détail
-        function addSubDetail() {
-            const container = document.getElementById('sub-details-container');
-            const subDetailHTML = `
-                <div class="sub-detail">
-                    <input type="text" name="sub_description[]" placeholder="Description" onblur="fetchPrixUnitaire(this)" required>
-                    <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
-                    <input type="text" name="sub_unit_price[]" placeholder="Prix Unitaire (€)" readonly>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', subDetailHTML);
-        }
-
-        // Récupérer le prix unitaire en fonction de la description
-        function fetchPrixUnitaire(input) {
-            const description = input.value;
-
-            fetch('/get-prix-unitaire', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ description: description })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.prix_unitaire) {
-                    input.parentElement.querySelector('input[name="sub_unit_price[]"]').value = data.prix_unitaire;
-                } else {
-                    input.parentElement.querySelector('input[name="sub_unit_price[]"]').value = 0;
-                }
-            })
-            .catch(error => console.error('Erreur:', error));
-        }
-    </script>
-</body>
-</html>
         </form>
     </div>
 </body>
