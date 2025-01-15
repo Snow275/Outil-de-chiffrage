@@ -19,13 +19,6 @@ def find_prix_unitaire(description):
 app = Flask(__name__)
 app.secret_key = 'dynamic_lots_secret_key'
 
-@app.route('/test-prix-unitaire')
-def test_prix_unitaire():
-    lot_name = "Gros Œuvre"
-    description = "Plancher"
-    prix_unitaire, unite = find_prix_unitaire(lot_name, description)
-    return f"Prix unitaire: {prix_unitaire}, Unité: {unite}"
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -85,8 +78,9 @@ def data_entry():
                 description = descriptions[i]
                 quantity = float(quantities[i]) if quantities[i] else 0
 
-                prix_unitaire, unit = find_prix_unitaire(description)
-                    print(f"Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
+                prix_unitaire, unit = find_prix_unitaire(lot_name, description)
+                print(f"Lot: {lot_name}, Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
+
 
                 # Calcul du total
                 total = quantity * prix_unitaire if prix_unitaire else 0
