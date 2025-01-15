@@ -4,17 +4,21 @@ from io import BytesIO
 import json
 
 # Fonction pour chercher le prix unitaire et l'unité
-def find_prix_unitaire(description):
-    with open('data.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
+import json
 
-    # Parcourir les sous-détails pour trouver la description
+def find_prix_unitaire(description):
+    try:
+        with open('data.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"Erreur de lecture du JSON : {e}")
+        return 0, "U"
+
     for lot in data['lots']:
         for sous_detail in lot['sous_details']:
             if sous_detail['description'].strip().lower() == description.strip().lower():
                 return sous_detail['prix_unitaire'], sous_detail['unite']
-
-    return 0, "U"  # Si non trouvé
+    return 0, "U"
 
 app = Flask(__name__)
 app.secret_key = 'dynamic_lots_secret_key'
