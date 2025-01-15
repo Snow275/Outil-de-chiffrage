@@ -19,13 +19,6 @@ def find_prix_unitaire(description):
 app = Flask(__name__)
 app.secret_key = 'dynamic_lots_secret_key'
 
-@app.route('/test-prix-unitaire')
-def test_prix_unitaire():
-    lot_name = "Gros Œuvre"
-    description = "Plancher"
-    prix_unitaire, unite = find_prix_unitaire(lot_name, description)
-    return f"Prix unitaire: {prix_unitaire}, Unité: {unite}"
-
 @app.route('/')
 def index():
     return render_template('index.html')
