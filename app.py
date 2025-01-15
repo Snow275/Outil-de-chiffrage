@@ -42,44 +42,30 @@ def index():
 def data_entry():
     if request.method == 'POST':
         # Récupération des sous-détails uniquement
-        sub_descriptions = request.form.getlist('sub_description[]')
-        sub_quantities = request.form.getlist('sub_quantity[]')
-        sub_units = request.form.getlist('sub_unit[]')
+        descriptions = request.form.getlist('sub_description[]')
+        quantities = request.form.getlist('sub_quantity[]')
+        units = request.form.getlist('sub_unit[]')
 
         all_sub_details = []
         total_global = 0
 
-        for i in range(len(sub_descriptions)):
-            try:
-                description = sub_descriptions[i]
-                quantity = float(sub_quantities[i]) if sub_quantities[i] else 0
+        for i in range(len(descriptions)):
+            description = descriptions[i]
+            quantity = float(quantities[i]) if quantities[i] else 0
 
-                # Chercher le prix avec la description du sous-détail
-                prix_unitaire, unit = find_prix_unitaire(description)
-                print(f"Sous-Détail: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
+            # 🔄 Récupérer le prix unitaire depuis la description
+            prix_unitaire, unite = find_prix_unitaire(description)
 
-                # Calcul du total
-                total = quantity * prix_unitaire
-                total_global += total
+            total = prix_unitaire * quantity
+            total_global += total
 
-                # Ajout au tableau
-                all_sub_details.append({
-                    'description': description,
-                    'quantity': quantity,
-                    'unit': unit,
-                    'unit_price': prix_unitaire,
-                    'total': total
-                })
-
-            except Exception as e:
-                print(f"Erreur avec {description} : {e}")
-                all_sub_details.append({
-                    'description': description,
-                    'quantity': quantity,
-                    'unit': "N/A",
-                    'unit_price': 0,
-                    'total': 0
-                })
+            all_sub_details.append({
+                'description': description,
+                'quantity': quantity,
+                'unit': unite,
+                'unit_price': prix_unitaire,
+                'total': total
+            })
 
         # Stocker dans la session
         session['all_lots'] = all_lots
