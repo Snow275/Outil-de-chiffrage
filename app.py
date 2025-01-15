@@ -26,12 +26,11 @@ def index():
 @app.route('/get-prix-unitaire', methods=['POST'])
 def get_prix_unitaire():
     data = request.json
-    lot_name = data.get('lot_name')
     description = data.get('description')
 
-    prix_unitaire, unite = find_prix_unitaire(lot_name, description)
+    prix_unitaire, unite = find_prix_unitaire(description)
     if prix_unitaire is None or unite is None:
-        return jsonify({'error': 'Lot ou sous-détail introuvable'}), 404
+        return jsonify({'error': 'Sous-détail introuvable'}), 404
 
     return jsonify({
         'prix_unitaire': prix_unitaire,
@@ -56,39 +55,28 @@ def add_lot():
 @app.route('/data-entry', methods=['GET', 'POST'])
 def data_entry():
     if request.method == 'POST':
-        # Récupération des données pour les lots principaux
-        lots = request.form.getlist('lot_name[]')
+        # Récupérer uniquement les descriptions et quantités
         descriptions = request.form.getlist('description[]')
         quantities = request.form.getlist('quantity[]')
-        unit = request.form.getlist('unit[]')
 
-        # Récupération des données pour les sous-détails
-        sub_descriptions = request.form.getlist('sub_description[]')
-        sub_quantities = request.form.getlist('sub_quantity[]')
-        sub_units = request.form.getlist('sub_unit[]')
-        sub_unit_prices = request.form.getlist('sub_unit_price[]')
-
-        # Construire les données des lots principaux
         all_lots = []
         total_global = 0
 
-        for i in range(len(lots)):
+        for i in range(len(descriptions)):
             try:
-                lot_name = lots[i]
                 description = descriptions[i]
                 quantity = float(quantities[i]) if quantities[i] else 0
 
-                prix_unitaire, unit = find_prix_unitaire(lot_name, description)
-                print(f"Lot: {lot_name}, Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
-
+                # Recherche du prix uniquement avec la description
+                prix_unitaire, unit = find_prix_unitaire(description)
+                print(f"Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
 
                 # Calcul du total
                 total = quantity * prix_unitaire if prix_unitaire else 0
                 total_global += total
 
-                # Ajout des données au tableau
+                # Ajouter les données
                 all_lots.append({
-                    'lot_name': lot_name,
                     'description': description,
                     'quantity': quantity,
                     'unit': unit,
@@ -96,34 +84,14 @@ def data_entry():
                     'total': total
                 })
             except Exception as e:
-                print(f"Erreur lors du traitement du lot {lots[i]} : {e}")
+                print(f"Erreur lors du traitement de la description {description}: {e}")
                 all_lots.append({
-                    'lot_name': lots[i],
-                    'description': descriptions[i],
+                    'description': description,
                     'quantity': quantity,
                     'unit': "N/A",
                     'unit_price': 0,
                     'total': 0
                 })
-
-        # Construire les données des sous-détails
-        all_sub_details = []
-        for i in range(len(sub_descriptions)):
-            try:
-                quantity = float(sub_quantities[i]) if sub_quantities[i] else 0
-                unit_price = float(sub_unit_prices[i]) if sub_unit_prices[i] else 0
-                total = quantity * unit_price
-                total_global += total
-                all_sub_details.append({
-                    'description': sub_descriptions[i],
-                    'quantity': quantity,
-                    'unit': sub_units[i],
-                    'unit_price': unit_price,
-                    'total': total
-                })
-            except (ValueError, IndexError):
-                print(f"Erreur lors du traitement du sous-détail {sub_descriptions[i]}")
-                continue
 
         # Stocker dans la session
         session['all_lots'] = all_lots
