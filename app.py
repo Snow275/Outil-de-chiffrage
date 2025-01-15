@@ -7,14 +7,14 @@ import json
 def find_prix_unitaire(description):
     with open('data.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
-    
-    # Parcours uniquement les sous-détails
+
+    # Parcourir les sous-détails pour trouver la description
     for lot in data['lots']:
         for sous_detail in lot['sous_details']:
             if sous_detail['description'].strip().lower() == description.strip().lower():
                 return sous_detail['prix_unitaire'], sous_detail['unite']
-    
-    return 0, "U"
+
+    return 0, "U"  # Si non trouvé
 
 app = Flask(__name__)
 app.secret_key = 'dynamic_lots_secret_key'
@@ -23,69 +23,42 @@ app.secret_key = 'dynamic_lots_secret_key'
 def index():
     return render_template('index.html')
 
-@app.route('/get-prix-unitaire', methods=['POST'])
-def get_prix_unitaire():
-    data = request.json
-    description = data.get('description')
-
-    prix_unitaire, unite = find_prix_unitaire(description)
-    if prix_unitaire is None or unite is None:
-        return jsonify({'error': 'Sous-détail introuvable'}), 404
-
-    return jsonify({
-        'prix_unitaire': prix_unitaire,
-        'unite': unite
-    })
-
-@app.route('/add-lot', methods=['POST'])
-def add_lot():
-    new_lot = request.json  # Attendre un objet JSON avec 'nom' et 'sous_details'
-
-    # Charger et mettre à jour le fichier JSON
-    with open('data.json', 'r') as f:
-        db = json.load(f)
-
-    db['lots'].append(new_lot)
-
-    with open('data.json', 'w') as f:
-        json.dump(db, f, indent=4)
-
-    return jsonify({'message': 'Lot ajouté avec succès !'})
-
 @app.route('/data-entry', methods=['GET', 'POST'])
 def data_entry():
     if request.method == 'POST':
-        # Récupérer uniquement les descriptions et quantités
-        descriptions = request.form.getlist('description[]')
-        quantities = request.form.getlist('quantity[]')
+        # Récupération des sous-détails uniquement
+        sub_descriptions = request.form.getlist('sub_description[]')
+        sub_quantities = request.form.getlist('sub_quantity[]')
+        sub_units = request.form.getlist('sub_unit[]')
 
-        all_lots = []
+        all_sub_details = []
         total_global = 0
 
-        for i in range(len(descriptions)):
+        for i in range(len(sub_descriptions)):
             try:
-                description = descriptions[i]
-                quantity = float(quantities[i]) if quantities[i] else 0
+                description = sub_descriptions[i]
+                quantity = float(sub_quantities[i]) if sub_quantities[i] else 0
 
-                # Recherche du prix uniquement avec la description
+                # Chercher le prix avec la description du sous-détail
                 prix_unitaire, unit = find_prix_unitaire(description)
-                print(f"Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
+                print(f"Sous-Détail: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
 
                 # Calcul du total
-                total = quantity * prix_unitaire if prix_unitaire else 0
+                total = quantity * prix_unitaire
                 total_global += total
 
-                # Ajouter les données
-                all_lots.append({
+                # Ajout au tableau
+                all_sub_details.append({
                     'description': description,
                     'quantity': quantity,
                     'unit': unit,
-                    'unit_price': prix_unitaire if prix_unitaire else 0,
+                    'unit_price': prix_unitaire,
                     'total': total
                 })
+
             except Exception as e:
-                print(f"Erreur lors du traitement de la description {description}: {e}")
-                all_lots.append({
+                print(f"Erreur avec {description} : {e}")
+                all_sub_details.append({
                     'description': description,
                     'quantity': quantity,
                     'unit': "N/A",
