@@ -85,12 +85,8 @@ def data_entry():
                 description = descriptions[i]
                 quantity = float(quantities[i]) if quantities[i] else 0
 
-                prix_unitaire, unit = find_prix_unitaire(lot_name, description)
-                if prix_unitaire == 0:
-                    print(f"⚠️ Lot ou description introuvable pour {lot_name} - {description}")
-                else:
-                    print(f"✅ Lot: {lot_name}, Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
-
+                prix_unitaire, unit = find_prix_unitaire(description)
+                    print(f"Description: {description}, Prix Unitaire: {prix_unitaire}, Unité: {unit}")
 
                 # Calcul du total
                 total = quantity * prix_unitaire if prix_unitaire else 0
