@@ -1,29 +1,154 @@
 {
   "lots": [
     {
-      "nom": "Gros Œuvre",
+      "nom": "Menuiseries Intérieures",
       "sous_details": [
         {
-          "description": "Béton armé",
-          "prix_unitaire": 200,
-          "unite": "m³"
+          "description": "Organigramme des cles",
+          "prix_unitaire": 1592.57,
+          "unite": "ENS"
         },
         {
-          "description": "Plancher",
-          "prix_unitaire": 150,
-          "unite": "m²"
-        }
+          "description": "Canons provisoires",
+          "prix_unitaire": 58.38,
+          "unite": "U"
+        },
+        {
+          "description": "Portes acoustiques",
+          "prix_unitaire": 1805.56,
+          "unite": "U"
+        },
+        {
+          "description": "Portes avec comportement CF",
+          "prix_unitaire": 2054.60,
+          "unite": "U"
+        },
+        {
+          "description": "Portes sans classement CF",
+          "prix_unitaire": 952.38,
+          "unite": "U"
+        },
+        {
+          "description": "Porte vitrée",
+          "prix_unitaire": 1833.94,
+          "unite": "U"
+        },
+        {
+          "description": "Impostes vitrées",
+          "prix_unitaire": 980.38,
+          "unite": "U"
+        },
+        {
+          "description": "Oculus",
+          "prix_unitaire": 2357.00,
+          "unite": "U"
+        },
+        {
+          "description": "Serrures définitives",
+          "prix_unitaire": 157.40,
+          "unite": "U"
+        },
+        {
+          "description": "Butoirs",
+          "prix_unitaire": 51.62,
+          "unite": "U"
+        },
+        {
+          "description": "Portillons",
+          "prix_unitaire": 2346.41,
+          "unite": "U"
+        },
+        {
+          "description": "Façade de gaine technique",
+          "prix_unitaire": 1267.27,
+          "unite": "U"
+        },
+        {
+          "description": "Trappes de gaine technique",
+          "prix_unitaire": 722.05,
+          "unite": "U"
+        },
+        {
+          "description": "Plinthes en bois",
+          "prix_unitaire": 64.95,
+          "unite": "ml"
+        },
+        {
+          "description": "Chassis vitré",
+          "prix_unitaire": 1276.27,
+          "unite": "m2"
+        },
+        {
+          "description": "Meubles locaux circulation (rangement haut/bas, rangement jeux)",
+          "prix_unitaire": 683.79,
+          "unite": "U"
+        },
+        {
+          "description": "Meubles locaux sanitaires (vestiaires, meubles sous-lavabos)",
+          "prix_unitaire": 573.21,
+          "unite": "U"
+        },
+        {
+          "description": "Casier de pharmacie",
+          "prix_unitaire": 158.23,
+          "unite": "U"
+        },
+        {
+          "description": "Plans de change",
+          "prix_unitaire": 0,
+          "unite": "U"
+        },
+        {
+          "description": "Plans de travail",
+          "prix_unitaire": 1452.16,
+          "unite": "U"
+        },
+        {
+          "description": "Panneaux d'affichage",
+          "prix_unitaire": 204.25,
+          "unite": "U"
+        },
+        {
+          "description": "Coffres d'habillage",
+          "prix_unitaire": 386.22,
+          "unite": "ml"
+        },
+        {
+          "description": "Armoires vestiaires",
+          "prix_unitaire": 634.62,
+          "unite": "U"
+        },
+        {
+          "description": "Séparation d'urinoirs",
+          "prix_unitaire": 71.81,
+          "unite": "U"
+        },
+        {
+          "description": "Chants plats",
+          "prix_unitaire": 168.75,
+          "unite": "ml"
+        },
+        {
+          "description": "Bancs",
+          "prix_unitaire": 552.57,
+          "unite": "U"
+        },
+        {
+          "description": "Boites à clés",
+          "prix_unitaire": 141.19,
+          "unite": "U"
+        },
+        {
+          "description": "Calfeutrement éléments bois",
+          "prix_unitaire": 8500.00,
+          "unite": "ENS"
+        },
+        {
+          "description": "Nettoyage de fin de chantier",
+          "prix_unitaire": 4022.44,
+          "unite": "ENS"
+        },
       ]
     },
-    {
-      "nom": "Terrassement",
-      "sous_details": [
-        {
-          "description": "Excavation",
-          "prix_unitaire": 50,
-          "unite": "m³"
-        }
-      ]
-    }
   ]
 }
