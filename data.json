@@ -147,8 +147,8 @@
           "description": "Nettoyage de fin de chantier",
           "prix_unitaire": 4022.44,
           "unite": "ENS"
-        },
+        }
       ]
-    },
+    }
   ]
 }
