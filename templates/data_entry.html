@@ -155,6 +155,17 @@
     <!-- Conteneur Principal -->
     <div class="container">
         <form action="/data-entry" method="POST">
+            <div id="sub-details-container">
+                <div class="sub-detail">
+                    <input type="text" name="sub_description[]" placeholder="Description" required>
+                    <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
+                </div>
+            </div>
+            <button type="button" class="btn" onclick="addSubDetail()">+ Ajouter un Sous-Détail</button>
+            <button type="submit" class="btn">Calculer</button>
+        </form>
+    </div>
+
 
             <!-- Section Lot Principal -->
             <div class="section">
