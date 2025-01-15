@@ -115,18 +115,19 @@
                 </tr>
                 {% endfor %}
             
-                {% for sub in sub_details %}
+                {% for detail in sub_details %}
                 <tr>
-                    <td>Sous-Détail</td>
-                    <td>{{ sub.description }}</td>
-                    <td>{{ sub.quantity }}</td>
-                    <td>{{ sub.unit }}</td>
-                    <td>{{ sub.unit_price }}</td>
-                    <td>{{ sub.total }}</td>
+                    <td>{{ detail.description }}</td>
+                    <td>{{ detail.quantity }}</td>
+                    <td>{{ detail.unit }}</td>
+                    <td>{{ detail.unit_price }}</td>
+                    <td>{{ detail.total }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <h3>Total Global : € {{ total_global }}</h3>
 
         <!-- Actions (boutons) -->
         <div class="actions">
