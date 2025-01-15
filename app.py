@@ -8,16 +8,19 @@ def find_prix_unitaire(lot_name, description):
     with open('data.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
     
-    print(f"Recherche du lot: {lot_name}, description: {description}")  # Debug
+    # Vérifie les données chargées
+    print("Chargement des données JSON :", data)
 
     for lot in data['lots']:
-        print(f"Vérification du lot: {lot['nom']}")  # Debug
+        print(f"Lot vérifié : {lot['nom']}")
         if lot['nom'].strip().lower() == lot_name.strip().lower():
             for sous_detail in lot['sous_details']:
-                print(f"Vérification de la description: {sous_detail['description']}")  # Debug
+                print(f"Sous-détail vérifié : {sous_detail['description']}")
                 if sous_detail['description'].strip().lower() == description.strip().lower():
+                    print(f"Prix trouvé : {sous_detail['prix_unitaire']}")
                     return sous_detail['prix_unitaire'], sous_detail['unite']
     
+    print("Aucun prix trouvé")
     return 0, "U"
 
 app = Flask(__name__)
