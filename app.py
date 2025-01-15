@@ -71,6 +71,7 @@ def data_entry():
             })
 
         # Stocker dans la session
+        all_lots = []  # ✅ Ajoute cette ligne avant de remplir all_lots
         session['all_lots'] = all_lots
         session['all_sub_details'] = all_sub_details
         session['total_global'] = total_global
