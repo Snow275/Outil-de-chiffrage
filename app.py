@@ -30,6 +30,12 @@ def data_entry():
         quantities = request.form.getlist('quantity[]')
         units = request.form.getlist('unit[]')
 
+   # Récupération des données pour les sous-détails
+        sub_descriptions = request.form.getlist('sub_description[]')
+        sub_quantities = request.form.getlist('sub_quantity[]')
+        sub_units = request.form.getlist('sub_unit[]')
+        sub_unit_prices = request.form.getlist('sub_unit_price[]')
+        
         all_lots = []
         total_global = 0
 
@@ -46,12 +52,13 @@ def data_entry():
                 total = quantity * prix_unitaire if prix_unitaire else 0
                 total_global += total
 
-                # ➕ Ajout des données au tableau
+                # Ajout des données au tableau
                 all_lots.append({
+                    'lot_name': lot_name,
                     'description': description,
                     'quantity': quantity,
                     'unit': unit,
-                    'unit_price': prix_unitaire,
+                    'unit_price': prix_unitaire if prix_unitaire else 0,
                     'total': total
                 })
             except Exception as e:
