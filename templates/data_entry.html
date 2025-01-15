@@ -206,16 +206,58 @@ function addSubDetail() {
             </div>
 
             <!-- Section Sous-Détails -->
-            <div class="sub-details">
-                <div class="section-title">Sous-Détails</div>
-                <div id="sub-details-container"></div>
-                <button type="button" class="btn" onclick="addSubDetail()">+ Ajouter un Sous-Détail</button>
-            </div>
+<div class="sub-details">
+    <div class="section-title">Sous-Détails</div>
+    <div id="sub-details-container">
+        <div class="sub-detail">
+            <input type="text" name="sub_description[]" placeholder="Description" onblur="fetchPrixUnitaire(this)" required>
+            <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
+            <input type="text" name="sub_unit_price[]" placeholder="Prix Unitaire (€)" readonly>
+        </div>
+    </div>
+    <button type="button" class="btn" onclick="addSubDetail()">+ Ajouter un Sous-Détail</button>
+</div>
 
             <!-- Actions -->
-            <div class="actions">
-                <button type="submit" class="btn">Calculer</button>
-            </div>
+<div class="actions">
+    <button type="submit" class="btn">Calculer</button>
+</div>
+
+<script>
+function addSubDetail() {
+    const container = document.getElementById('sub-details-container');
+    const subDetailHTML = `
+        <div class="sub-detail">
+            <input type="text" name="sub_description[]" placeholder="Description" onblur="fetchPrixUnitaire(this)" required>
+            <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
+            <input type="text" name="sub_unit_price[]" placeholder="Prix Unitaire (€)" readonly>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', subDetailHTML);
+}
+
+// Fonction pour récupérer le prix unitaire depuis le serveur
+function fetchPrixUnitaire(input) {
+    const description = input.value;
+
+    fetch('/get-prix-unitaire', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ description: description })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.prix_unitaire) {
+            input.parentElement.querySelector('input[name="sub_unit_price[]"]').value = data.prix_unitaire;
+        } else {
+            input.parentElement.querySelector('input[name="sub_unit_price[]"]').value = 0;
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+}
+</script>
         </form>
     </div>
 </body>
