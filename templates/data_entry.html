@@ -153,11 +153,28 @@
     <header>Gestion des Lots</header>
 
     <!-- Conteneur Principal -->
-    <div class="container">
-        <form action="/data-entry" method="POST">
-        <input type="text" name="description[]" placeholder="Description" required>
-        <input type="number" name="quantity[]" placeholder="Quantité" step="0.01" required>
-        <button type="submit">Calculer</button>
+<form action="/data-entry" method="POST">
+    <div id="sub-details-container">
+        <input type="text" name="sub_description[]" placeholder="Description du sous-détail" required>
+        <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
+        <button type="button" onclick="addSubDetail()">+ Ajouter un Sous-Détail</button>
+    </div>
+    <button type="submit">Calculer</button>
+</form>
+
+<script>
+function addSubDetail() {
+    const container = document.getElementById('sub-details-container');
+    const html = `
+        <div>
+            <input type="text" name="sub_description[]" placeholder="Description du sous-détail" required>
+            <input type="number" name="sub_quantity[]" placeholder="Quantité" step="0.01" required>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', html);
+}
+</script>
+
             <!-- Section Lot Principal -->
             <div class="section">
                 <div class="section-title">Lot Principal</div>
