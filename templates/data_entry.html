@@ -155,6 +155,9 @@
     <!-- Conteneur Principal -->
     <div class="container">
         <form action="/data-entry" method="POST">
+        <input type="text" name="description[]" placeholder="Description" required>
+        <input type="number" name="quantity[]" placeholder="Quantité" step="0.01" required>
+        <button type="submit">Calculer</button>
             <!-- Section Lot Principal -->
             <div class="section">
                 <div class="section-title">Lot Principal</div>
